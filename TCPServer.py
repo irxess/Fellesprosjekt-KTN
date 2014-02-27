@@ -1,0 +1,2 @@
+from pygame import *
+
