@@ -1,4 +1,4 @@
 Fellesprosjekt-KTN
 ============================
 
-Kode vi har skrevet til fellesprosjektet.
+Kode vi i gruppe 5 (2014) har skrevet til KTN-delen av fellesprosjektet.
