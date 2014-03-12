@@ -1,4 +1,5 @@
 import asyncore, socket, collections
+import cursesUI
 
 class Client(asyncore.dispatcher):
     def __init__(self, host_address, name):
@@ -30,9 +31,8 @@ class Client(asyncore.dispatcher):
         if not message:
             return
         print 'received ', message
-        #self.send('Hello from client')
 
 name = raw_input('write your nickname: ')
 c = Client(('127.0.0.1', 5007), name)
-# spawn other thread reading input here
+# do other stuff here
 asyncore.loop()

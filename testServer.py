@@ -7,13 +7,13 @@ class ClientHandler(asyncore.dispatcher):
         self.host = host
         self.outbox = collections.deque()
 
-    def say(self, message):
+    def sendMessage(self, message):
         self.outbox.append(message)
 
     def handle_read(self):
         client_message = self.recv(1024)
         if not client_message:
-            print ('client disconnected?')
+            print ('client disconnected')
             return
         print ('broadcasting message')
         self.host.broadcast(client_message)
@@ -51,7 +51,7 @@ class Server(asyncore.dispatcher):
     def broadcast(self, message):
         print ('Broadcasting')
         for client in self.remote_clients:
-            client.say(message)
+            client.sendMessage(message)
 
-s = Server(('0.0.0.0', 5007))
+s = Server(('0.0.0.0', 1001))
 asyncore.loop()

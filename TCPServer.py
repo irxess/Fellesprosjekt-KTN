@@ -10,6 +10,8 @@ class listeningThread (Thread):
         self.threadID = threadID
         self.connectionSocket = connectionSocket
         self.addr = addr
+        self.newMessage = ""
+        self.oldMessage = ""
 
     def run(self):
         while True: #should include a check if client wants to quit
@@ -44,13 +46,4 @@ def acceptClient():
 
 
 acceptClient()
-
-#def recvMsg(connectionSocket,addr):
-#    while True:
-#        print 'venter pa melding'
-#        message, address = connectionSocket.recvfrom(1024)
-#        print'package recieved from: ', address, "msg: ", message
-#
-#
-#Thread(target=acceptClient()).start()
 

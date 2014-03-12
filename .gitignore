@@ -1,6 +1,2 @@
-*.class
+cursesUI.pyc
 
-# Package Files #
-*.jar
-*.war
-*.ear
