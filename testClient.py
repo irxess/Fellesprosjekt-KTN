@@ -1,5 +1,5 @@
-import asyncore, socket, collections
-import cursesUI
+import asyncore, socket, collections, json, threading, re
+#import cursesUI
 
 class Client(asyncore.dispatcher):
     def __init__(self, host_address, name):
@@ -18,9 +18,10 @@ class Client(asyncore.dispatcher):
         if not self.outbox:
             return
         message = self.outbox.popleft()
+        json_msg = json.dumps(message)
         if len(message) > 1024:
             raise ValueError('message too long')
-        self.send(message)
+        self.send(json_msg)
 
     def handle_close(self):
         print 'client: connection closed'
@@ -30,9 +31,30 @@ class Client(asyncore.dispatcher):
         message = self.recv(1024)
         if not message:
             return
-        print 'received ', message
+        # decode JSON here
+        inn = json.loads(message)
+        print inn.get("name") + ": " + inn.get("msg")
 
-name = raw_input('write your nickname: ')
-c = Client(('127.0.0.1', 5007), name)
-# do other stuff here
-asyncore.loop()
+def read_and_send_input():
+    while True:
+        message = raw_input("> ")
+        # send to server
+        #inn = json.loads(message)
+        ut = {"name" : username, "msg" : message}
+        c.say( json.dumps(ut) )
+
+
+username = raw_input("username: ")
+while (re.match( '^[\w-]+$', username ) is None):
+    print "Invalid username"
+    username = raw_input("username: ")
+
+c = Client(('mips.pvv.org', 1001), username)
+thread = threading.Thread(target=asyncore.loop)
+thread.daemon = True  # vil denne avsluttes?
+thread.start()
+
+#ui = cursesUI.clientInterface(username)
+#ui.paintWindow()
+
+read_and_send_input()

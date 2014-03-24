@@ -33,7 +33,7 @@ class Client(asyncore.dispatcher):
         #self.send('Hello from client')
 
 name = raw_input('write your nickname: ')
-c = Client(('127.0.0.1', 5007), name)
+c = Client(('127.0.0.1', 1001), name)
 c.say("Hello to all other worlds!")
 # spawn other thread reading input here
 asyncore.loop()

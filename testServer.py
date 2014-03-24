@@ -1,5 +1,5 @@
 from __future__ import print_function
-import asyncore, socket, collections
+import asyncore, socket, collections, json
 
 class ClientHandler(asyncore.dispatcher):
     def __init__(self, host, socket, address):
@@ -16,7 +16,8 @@ class ClientHandler(asyncore.dispatcher):
             print ('client disconnected')
             return
         print ('broadcasting message')
-        self.host.broadcast(client_message)
+        ut = json.loads(client_message)
+        self.host.broadcast(ut)
 
     def handle_write(self):
         if not self.outbox:
@@ -31,7 +32,7 @@ class ClientHandler(asyncore.dispatcher):
         self.close()
 
 class Server(asyncore.dispatcher):
-    def __init__(self, address=('localhost', 1001)):
+    def __init__(self, address=('mips.pvv.org', 1001)):
         asyncore.dispatcher.__init__(self)
         self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
         self.bind(address)
@@ -43,7 +44,8 @@ class Server(asyncore.dispatcher):
         socket, address = self.accept()
         print ("connection by", address)
         self.remote_clients.append(ClientHandler(self, socket, address))
-        socket.send("Hello from server")
+        ut = {"name" : "server", "msg" : "Hello from server"}
+        socket.send(json.dumps(ut))
 
     def handle_read(self):
         print ('received message: %s', self.read())
